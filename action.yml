@@ -1,0 +1,81 @@
+name: "Send Notification Action"
+description: "Sends a customized notification payload to Url"
+branding:
+  icon: "bell"
+  color: "blue"
+inputs:
+  status:
+    description: "Status of the pipeline (e.g., success, failure)."
+    required: true
+  message:
+    description: "Main message for the notification."
+    required: true
+  project:
+    description: "Project name."
+    required: true
+  branch:
+    description: "Branch name (e.g., main, develop)."
+    required: true
+  repository:
+    description: "Repository name (owner/repo)."
+    required: true
+  commit:
+    description: "Commit SHA."
+    required: true
+  cloud-provider:
+    description: "Cloud provider information."
+    required: true
+  user:
+    description: "User who triggered the workflow."
+    required: true
+  build-url:
+    description: "URL to the GitHub Actions workflow run."
+    required: true
+  critical-count:
+    description: "Number of critical vulnerabilities."
+    required: true
+  high-count:
+    description: "Number of high vulnerabilities."
+    required: true
+  medium-count:
+    description: "Number of medium vulnerabilities."
+    required: true
+  low-count:
+    description: "Number of low vulnerabilities."
+    required: true
+  unknown-count:
+    description: "Number of unknown vulnerabilities."
+    required: true
+  total-count:
+    description: "Total number of vulnerabilities."
+    required: true
+  webhook-url:
+    description: "The webhook URL to send Notification"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install jq
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install -y jq
+
+    - name: Run Send Notification Script
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/script.sh \
+          "${{ inputs.status }}" \
+          "${{ inputs.message }}" \
+          "${{ inputs.project }}" \
+          "${{ inputs.branch }}" \
+          "${{ inputs.repository }}" \
+          "${{ inputs.commit }}" \
+          "${{ inputs.cloud-provider }}" \
+          "${{ inputs.user }}" \
+          "${{ inputs.build-url }}" \
+          "${{ inputs.critical-count }}" \
+          "${{ inputs.high-count }}" \
+          "${{ inputs.medium-count }}" \
+          "${{ inputs.low-count }}" \
+          "${{ inputs.unknown-count }}" \
+          "${{ inputs.total-count }}" \
+          "${{ inputs.webhook-url }}"
